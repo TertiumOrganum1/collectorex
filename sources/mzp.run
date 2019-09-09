@@ -1,0 +1,8 @@
+name "TOCollector"
+version 1.0
+
+treeCopy collectorex to $scripts
+copy startup\*.* to $scripts\startup
+copy icons\*.* to $icons
+run $scripts\Startup\tocollectorex.ms
+run message.ms

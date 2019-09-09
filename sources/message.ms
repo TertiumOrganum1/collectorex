@@ -1,0 +1,1 @@
+messageBox "Thank you for installing TOCollectoREX!\r\rGo to Customize->Customize User Interface->Toolbars,\rselect 'Tertium Organum CollectoREX' from\rcategory 'Tertium Organum' and drag it to toolbar.\rYou should restart 3dsmax to see utility icon.\r\rSee docs." title:"TOCollectoREX" beep:false

@@ -1,0 +1,415 @@
+<html>
+<head>
+<title>Tertium Organum CollectoREX Help</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <style>
+    h1{
+      font-family: "Verdana";
+      font-size: 18pt;
+      font-weight: bold;
+    }
+    h2{
+      font-family: "Verdana";
+      font-size: 16pt;
+      font-weight: bold;
+    }
+    h3{
+      font-family: "Verdana";
+      font-size: 14pt;
+      font-style: italic;
+      font-weight: bold;
+    }
+    h4{
+      font-family: "Verdana";
+      font-size: 12pt;
+      font-weight: bold;
+    }
+    body,li,table
+    {
+      font-family: "Verdana";
+      font-size: 10pt;
+      font-weight: normal;
+      text-align: justify;
+    }
+    p
+    {
+      font-family: "Verdana";
+      font-size: 10pt;
+      font-weight: normal;
+      text-align: justify;
+      text-indent: 20px
+    }
+    img
+    {
+      border: 0 none;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Tertium Organum CollectoREX: user's manual</h1>
+<h2>Install</h2>
+Unpack archive. In Max select MAXScript->Run script and choose mzp-file. Then select Custimize->Custoimize User Interface..., in window "Custoimize User Interface" go to Toolbars tab and
+choose "Tertium Organum" from Category combo box. Draq button "Tertium Organum CollectoREX" to toolbar. In order to view CollectoREX icon you must restart Max.
+<h2>Quick start</h2>
+Main utilite purpose - collect all files linked with project to choosen by user folders. It's for order in mind and on hard disk. It's for transferring scenes to another computers.
+For collector quick start:
+<br />
+
+1. Load your scene (for beginning - not containing Xrefs).<br />
+2. Launch utility (utility button on toolbar is trigger button - click it once more to close utility). <br />
+3. To realtime log view open MAXScript Listener (F11 or MAXScript -> MAXScript Listener) <br />
+4. Choose collect folders, options from category <b>Affect</b> will become available<br /> <br />
+<center><img src="img/1.gif" width="243" height="290" alt="" /></center><br />   <br />
+5. Click Collect Resources button.<br />  <br />
+<center><img src="img/2.gif" width="162" height="307" alt="" /></center><br />     <br />
+6. Utitlity will collect all project resources, update resource links in scene and save scene.
+In scene folder will appear two files: backup-file and log-file.<br />
+
+
+<h2>Terms in this manual</h2>
+<b>XRef-tree</b> – current scene plus all scenes linked to it by XRef links (XRef Scene, XRef Object, XRef Material, XRef Atmospheric). XRef-links may be looped<br />
+<b>IES-file</b> – simplified name of photometric data files, used by photometric lights.<br />
+<b>Links (to files/resources)</b> – properties of scene entities (materials, objects, modifiers, etc.) of "FileName/String" and "Bitmap" types, pointing to files of any type
+(bitmaps, shaders, IES-files, etc.), except Xref links.<br />
+<b>Collect folders</b> – three choosing by user folders in which utility will copy: <ul><li>bitmaps and IES-files</li> <li>HDR-images</li> <li>Vray meshes</li> </ul>
+<b>Link's tree in scene</b> – list of objects connected by relation "the whole - part", showing link's place in scene. For example link-property of subtexture of texture of submaterial
+of multimaterial, applied to one of scene objects, have such link's tree: object name -> multimaterial name -> submaterial name -> texture name -> subtexture name -> property name.<br />
+<b>Real file path</b> – path of existing file - not always path stored in max scene. When Max can not find file by stored path it tries to search in scene folder and all it's subfoilders, then
+in system and user defined paths. That's why stred path may differ from real file path. When you merge objects in your scene - things become more confusing. <br />
+<b>Project</b> – in this manual context project - current scene's XRef-tree. If scene contains no Xref links, project is scene itself.<br />
+<h2>Technical requirements and usage hints</h2>
+Tertium Organum CollectoREX created to work with scenes, which render by Default Scanline Renderer or Chaous Group VRay Renderer. Fry Renderer not supported. Maxwell renderer's materials:
+utility can extract only current layer and current coating info.<br />
+Utility has tested with following 3dsmax versions: 9sp1-sp2, 2008, 2009. Work in 9 w/o sp1 and previous versions - impossible.<br />
+Utility supports network paths. If you want to collect to network folder you must have read and write access to it.<br />
+It's desirable - but not indispensable - to restart Max before using utility. Utility operates with big data arrays - so MAXScript garbage collector errors may appear. In some cases instability
+and amassing gc errors may cause Max crash.<br />
+It's recommended to increase size of Initial Heap Allocation on MAXScript tab of Preference Settings window (Customize->Preferences…) at least to 100Mb. It will help utility to work more stable.<br />
+<h2>Why choose Tertium Organum CollectoREX</h2>
+Because it:
+<ul>
+<li> allows collect resources of selected types only </li>
+<li> collects resources of different types to different folders (if you want, you may set one folder for all types)</li>
+<li> sujjests variant of operation, if file with copying file name already exists in collect folder, providing small view of file and info for you can choose what to do</li>
+<li> when compares files uses full image comparison with and w/o alpha channel - if it is image or HDRI - and CRC comparison - if it is not image
+</li>
+<li> collects only used in scene resources (bypassing Asset Tracking) </li>
+<li> if you want can skip Material Editor content which is not used in scene; utility can clear it before each operation</li>
+<li> skip resources from Scene States</li>
+<li> after collect updates ALL links to ALL collected resources so as they point to real files</li>
+<li> has many settings, which automatically save with current scene and later load from it</li>
+<li> allows to save settings as global defaults - in order not to make setup with each new scene</li>
+<li> allows to build workflow, based on periodical resource collect and semiautomatic maintenance of three or less collect folders (utility copies files to collect folders and can delete unused)</li>
+<li> makes backup files (one or many when increment backup is on), not using Max but working with file system: saving by Max sometimes cause crash and data loss</li>
+<li> automatically saves scene after operation complete: you may forget to save scene and so - lost data</li>
+<li> allows to find out which scene objects point to missing files</li>
+<li> allows to set new collect folders and rewrite all file links (without file copying) so that they point to files inside new collect folders - when you move your project to another machine or place it to another location within your machine you will need such relink to access moved resource files</li>
+<li> outputs information about real file paths and allows to rewrite wrong links</li>
+<li> allows (after collect operation) to view which files are unused by project and suggests to delete them or move to local recycle bin</li>
+<li> converts big images (".tif", ".tiff", ".psd", ".png", ".tga" and ".bmp") to JPEG or TGA+alpha - for less disk space usage and scene load speed increasing</li>
+<li> allows to process all scenes linked to current scene by XRef-links of all kinds, in batch mode</li>
+<li> has anti-crash mechanism for batch mode: stores its state before processing each file to be able to continue after crash, if one occures</li>
+<li> outputs (in files and in console) detailed log about all operations and their parameters; log file names contains incrementing number</li>
+<li> allows break every operation on every phase, including batch operation</li>
+</ul>
+<h2>Utility functions</h2>
+1. <b>Collect resources</b> – collection of all resources (images, HDR images, Vray meshes, IES-files, shader files) pointed by current scene or Xref-tree to specified folders and update scene links
+<br />
+2. <b>Unused</b> – search in collect folders files that no longer used by any scene (or whole Xref-tree) link. You can delete founded files or move them to "local recycle bin" - subfolder "$trash$" created
+in folder where unused file had founded<br />
+3. <b>Relink to resources roots</b> – attempt to rewrite all scene (or whole Xref-tree) links so that they poin to files with same names as before but within specified collect folders. If some file
+doesn't exist in corresponding collect folder, link pointing to it remains the same. This function is needed when you move the whole project or its resources to another location or even computer<br />
+4. <b>Resolve links to existing</b> – this function is for ascertainment of real file paths (instead of stored in scene) of resources used by scene (or whole Xref-tree) and for rewriting all
+scene links so that they point to really existing files<br />
+5. <b>Missing files Identity</b> – output full object trees of scene (or whole Xref-tree) entities, that point to missing files<br />
+6. <b>Convert to JPEG/TGA</b> – conversion ".tif", ".tiff", ".psd", ".png", ".tga" and ".bmp" files to JPEG or TGA (w/alpha, RLE-compressed) files; if converting file has alpha channel, user can choose operation variant<br />
+<h2>Interface</h2>
+Interface consists of three rollouts.<br />     <br />
+<table width = "100%">
+<tr>
+<td width = 180>&nbsp;
+</td>
+<td>
+<h4>Rollout "TO CollectoREX"</h4>
+</td>
+</tr>
+<tr>
+<td width = 180>
+<img src="img/3.gif" width="167" height="718" alt="" />
+</td>
+<td>
+<b>Files</b> <b>with</b> <b>same</b> <b>names</b><br />
+Operations with files, having the same names as existing in collect folders<br />
+<b>Ask</b> <b>even</b> <b>if</b> <b>bmps</b> <b>are</b> <b>equal</b> – show coparison dialog with operation variants "Replace", "Use existing" and "Rename" even if images are equal.<br />
+<b>Non</b>-<b>img</b> <b>full</b> <b>compare</b> (<b>slow</b>!) – compare non-image files byte per byte, if their CRCs are equal. It's very slow if comparing files are big. If you are collecting only images, HDRI and IES-files - you can easily use this option. But still - it's not necessary.
+<br />
+<b>Ask</b> <b>even</b> <b>if</b> <b>binary</b> <b>are</b> <b>equal</b> –
+  show comparison dialog with operation variants for non-image files even if their are equal<br />
+<br />
+<b>Security</b><br />
+Data security<br />
+<b>Make</b> <b>back</b>-<b>ups</b> – make backups before executing utility function changing scene<br />
+<b>Incremental</b> <b>back</b>-<b>ups</b> – if backup file already exists create new file with name, which consists of: scene name, ordinal number and dual extention "max.backup": myscene.max.backup, myscene1.max.backup, myscene2.max.backup, etc. If this option is not checked, backup file (&lt;scene name&gt;.max.backup) will rewrite each time
+<br />
+<b>Ask</b> <b>user</b> <b>when</b> <b>file</b> <b>op</b> <b>fails</b> – show full abort of current function request if file system error appears. Such errors appear if some files opened by
+another programs (e.g. by Photoshop), due some network or hard disk problems. If user agrees to abort function, function execution is aborted and user can locate and fix problem manually. If user answers "No", error will be ignored and copying of this file will be skipped. If user aborts function execution, he can undo all scene changes simply by reloading file: when aborting function utility does not save changes. What files (and how much) was copied during aborted function user can find out from function log.<br />
+<b>Reload</b> <b>while</b> <b>fix</b> (<b>slow</b>!) – reload images while changing links. It takes much time and memory (sometimes extremally much!). But reload is not necessary.
+Now this option is almost useless. But still it's possible situation, when: while collecting, you meet file with same name as file in collect folder, and choose "Use existing"; but that files are different; you do not see changed texture after collection. Most Max entity properties update when needed, so described situation did not appear so far while testing, but it's still possible. So, if you want you can use this option, but be careful - it can even force system show Windows Virtual Memory Increase warning! <br />
+<br />
+<b>Content</b>
+Scene content<br />
+<b>Process</b> <b>medit</b>-<b>only</b> <b>content</b> – also collect materials and textures that exist only in Material Editor and not applied to any scene object.<br />
+<b>Process</b> <b>XRef</b> <b>structure</b> – process not only current scene but the whole Xref tree.<br />
+<b>Clear</b> <b>medit</b> <b>before</b> <b>proceed</b> – clear Material Editor palette before function execution. If this option is checked, option <b>Process medit</b>-<b>only</b> <b>content</b> disabled.<br />
+<b>Ignore</b> <b>shaders</b> – ignore ".cgfx", ".mi", ".psh", ".vsh", ".fx", ".fxh", ".axml", ".msl" files. Uncheck this option only if you use your own shaders not including or loading any files, and it is possible and nedded to collect them.<br />
+<b>Scan</b> <b>all</b> <b>tex</b> <b>instances</b> <b>also</b> – also scan all TextureMap objects in scene. This option is added just in case standard algorithm miss something. Now it seems to be useless due no textures skipped by standard algorithm was found while testing. If you think that not all files was collected by utility, you can try to check this option. Unfortunately, this option does not resolve problems with Fry and Maxwell renderers. <br />
+<br />
+<b>Collect</b> <b>Roots</b><br />
+Collect folders. Button with elipsis launches folder select dialog
+<br />
+<b>Images</b> & <b>ph</b>.<b>web</b> <b>root</b> – images (except HDRI) and IES-files collect folder. Shaders also go here if unchecked option <b>Ignore</b> <b>shaders</b>
+from category <b>Content</b><br />
+<b>HDRI</b> <b>root</b> – HDR-images collect folder<br />
+<b>VRay</b> <b>meshes</b> <b>root</b> – Vray-meshes collect folder<br />
+ <br />
+<b>Affect</b><br />
+What to process<br />
+<b>Images</b> & <b>ph</b>.<b>web</b> – shaders will be processed also if <b>Ignore</b> <b>shaders</b> is checked<br />
+<b>HDR</b> <b>images</b><br />
+<b>VRay</b> <b>meshes</b><br />
+<br />
+<b>Resource</b> <b>roots</b> <b>related</b><br />
+Utilite functions relaited to collect folders. Only selected types of resources will be affected.<br />
+<b>Collect</b> <b>resources</b> – execute <b>"Collect"</b> function of utility<br />
+<b>Unused</b> - execute <b>"Unused"</b> function of utility; <b>Summary</b> <b>only</b> - if processing Xref-tree show only summary (don't show for every file)<br />
+<b>Relink</b> <b>to</b> <b>resources</b> <b>roots</b> – execute <b>"Relink to resources roots"</b> function of utility<br />
+<br />
+<b>Resolve</b> <b>links</b> <b>to</b> <b>existing</b> – execute <b>"Resolve links to existing"</b> function of utility <br />
+<b>Missing</b> <b>files</b> <b>identity</b> – execute <b>"Missing</b> <b>files</b> <b>identity"</b> function of utility<br />
+<b>Continue</b> <b>op</b> <b>after</b> <b>crash</b> – continue last function, launched for Xref-tree but interrupted by Max crash. (see below – <b>Continue op after crash</b>)
+
+</td>
+</tr>
+
+<tr>
+<td width = 180>&nbsp;
+</td>
+<td>
+<br /> <br />
+<h4>Rollout "Convert to JPEG/TGA"</h4>
+</td>
+</tr>
+
+<tr>
+<td width = 180> <img src="img/4.gif" width="169" height="177" alt="" />
+</td>
+<td>
+Convert ".tif", ".tiff", ".psd", ".png", ".tga" and ".bmp" images to JPEG. If it has alpha-channel utility offers operation variants.
+<br />
+<b>If image has alpha (ask/skip/JPG/TGA)</b> – if image has alpha-channel: ask user / skip / convert to JPEG anyway (alpha will be lost) / convert to TGA with RLE-compression (saving alpha)<br />
+<b>Premultiplied</b> <b>alpha</b> <b>in</b> <b>TGA</b> – mix semitransparent pixels color with background color (TGA only)<br />
+<b>JPEG</b> <b>quality</b> (JPEG only)<br />
+<b>Use</b> <b>NConvert</b>© <b>if</b> <b>exists</b> – if <b>NConvert</b>© exists in utility folder ("maxroot\scripts\tocollectorex" or "maxroot\scripts\tocollectorex Demo" for demo version), windows root folder or in Windows\System32 folder, it will be used (as it is more accurate) for JPEG conversion instead of standard Max compressor<br />
+<b>Convert</b> – execute <b>Convert to JPEG/TGA</b> function of utility; <b>Affect</b> options will be ignored <br />
+
+</td>
+</tr>
+
+<tr>
+<td width = 180>&nbsp;
+</td>
+<td>
+<br /> <br />
+<h4>Rollout "Help & config"</h4>
+</td>
+</tr>
+
+<tr>
+<td width = 180> <img src="img/5.gif" width="165" height="179" alt="" />
+</td>
+<td>
+The documentation and configuration<br/>
+Configuration automatically saved together with the scene and loads in scene load time. Besides it can be globally saved in ini-file. Such configuration called "global user defaults" or default settings. Default settings load, if the current scene does not contain configuration. Also it is possible to load them compulsorily or to reset them to initial values.<br/>
+<b>Config </b><br/>
+<b>Save</b> <b>config as defaults</b> - save current configuration as default values<br/>
+<b>Load</b> <b>config from defaults</b> - load configuration from default values<br/>
+<b>Clear</b> <b>defaults</b> - reset default settings to initial state<br/>
+<br/>
+<b>About</b> - start a browser with a help file<br/>
+<b>License</b> <b>search</b>/<b>request</b> (in a demo - <b>How to buy</b>) -  search the suitable license in: utility folder ("maxroot\scripts\tocollectorex"), 3dsmax root folder, Windows root folder and Windows\System32 folder. In a demo this button is substituted by button <b>How to buy</b> which outputs short information on reception of the complete version. <br/>
+</td>
+</tr>
+</table>
+
+<h2>The detailed description of utility functions</h2>
+<h3>The functions working with collect folders</h3><br/>
+All functions output the detailed information about all the operations - in a log-file and in console MAXScript Listener. To see it, press F11 or click MAXScript-> MAXScript Listener. <br/>
+Progress of each stage of function (and its name) is displayed by the progress indicator at the 3dsmax window bottom. Each function can be interrupted at any stage by pressing of button <b>Cancel</b> near the indicator of progress or key ESC.<br/>
+<h4>Collect resources</h4><br/>
+This function includes:<br/>
+- A choice by the user of collect folders<br/>
+- The scene backup saving<br/>
+- Collection of links information<br/>
+- Output of a map of real paths of resources used in scene<br/>
+- Search and output of not found files and a complete tree of each object referring to this file<br/>
+- Copying of files to collect folders<br/>
+- Fixing links<br/>
+- Saving scene file<br/>
+<br/>
+<b>Collect folders</b><br/>
+All collect folders of one project can be the same. The same collect folders can be specified for several projects (for example, for storage big VRay meshes). In this case <b>Unused</b> function of utility should be used with care - files which are not used only by the current scene or its XRef-tree will be shown. For example, if every project uses its own collect folders for images, but all use the same folder for collection VRay meshes, function <b>Unused</b> on any of these projects with checked option <b>VRay meshes</b> will show not used only by the current project.<br/>
+<b>The backup</b> <b>saving</b> <br/>
+The utility allows carrying out the backup saving. Two variants are thus possible: incremental (by default) and simple. Incremental backup: file name will consist of a name of an original file, a sequence number (if it is not the first backup saving for this file) and double "max.backup" extension. Simple backup: the name does not contain a sequence number, and if the file with such name already is, it is rewritten atop.<br/>
+<br/>
+<b>Collection of links information</b><br/>
+The utility searches links in following 3dsmax entities: <br/>
+- Geometry <br/>
+- Lights<br/>
+- Space warps<br/>
+- Helpers<br/>
+- Splines <br/>
+- The textures, assigned to a renderer (for example, VRay environment map)<br/>
+- 3dsmax environment map <br/>
+- Effects <br/>
+- Atmospherics<br/>
+- All objects of parent type for all textures in system (if option <b>Scan all tex instances also</b> from category Content of the main rollout is checked)<br/>
+- All materials and the maps which containing in Material Editor and have been not applied to objects of the scene (if option <b>Process medit</b>-<b>only</b> <b>content also</b> categories <b>Content</b> of the main rollout is checked)<br/>
+In entities utility searches for maps, IES-files, HDRI and VRay mesh’è - depending on what options are checked in category <b>Affect</b> of the main rollout<br/>
+<br/>
+<b>Map</b> <b>of real layout of files</b><br/>
+<b>Terms</b> see: <b>Real path of a file</b>. The utility outputs to a log-file paths in a format "the path saved in the scene"-> "really found path". If the file is not found, instead of really found path there will be a syntactic word "missing". While output repetitions are not considered - any file will be shown only once.<br/>
+<br/>
+<b>Collection</b>: <b>Copying of files to collect folders</b>. <b>Files with the same names</b><br/>
+If while copying of files into collect folders utility finds out, that the file with such name already is, it tries to compare files. It compares maps completely (with alpha and without), for other files calculates the check sum algorithm HMACSHA512. If user wishes it is possible to use a complete byte per byte matching for such files, but it occupies too much time, and matching of check sums in most cases guarantees, that files are identical. When files with identical names are equal the links will be rewritten so, that they point to existing in collect folders files (this behavior can be changed by means of options <b>Ask even if bmps are equal</b> and <b>Ask even if binary are equal</b>). <br/>
+If names of copied and existing files are equal, and files not equal (or it is checked one or both options <b>Ask even if bmps are equal</b> and <b>Ask even if binary are equal</b>) user sees the comparison window to make more correctly decision what to do. He can: replace existing file with a copied file, use existing, or rename it (accordingly, buttons <b>Replace</b>, <b>Use Existing</b>, <b>Rename to </b>…). The name of a file for renaming, unique for collect folders, is substituted in a comparison window. If user wishes it can be changed, but the utility will not allow setting a name, non-unique for collect folders. In a matching window between slide miniatures equal-signs (==) or inequalities (<>) are put as results of comparison of maps without an alpha-channel (rgb) and with it (rgba). Under maps the information on files is shown: if it is maps - the dimensions, the size, presence of additional channels (for RLA) and an alpha-channel. For the files which are not maps, the size is shown only. The initial file path before collection user can see below. <br/>
+If user wishes he can cancel collection function at this stage, having pressed button <b>ABORT</b> <b>COLLECT</b>. <br/>
+ <br />
+<center><img src="img/6.gif" width="914" height="594" alt="" /></center><br />  <br />
+<b>Fixing links in the scene</b><br/>
+After end of copying the utility walk through all objects in which references to files have been found and writes their new values. If option <b>Reload while fix</b> (<b>slow</b>!) is checked (category <b>Security</b> of the main rollout), the utility can reload maps. Usually it is not required. Now this option is almost useless. But still it's possible situation, when: while collecting, you meet file with same name as file in collect folder, and choose "Use existing"; but that files are different; you do not see changed texture after collection. Most Max entity properties update when needed, so described situation did not appear so far while testing, but it's still possible. So, if you want you can use this option, but be careful - it can even force system show Windows Virtual Memory Increase warning!<br/>
+<h4>Unused</h4><br/>
+This function should be used after the scene has passed collection process. <b>Unused</b> allows to find out, what files in collect folders are not used by the current project. Function includes:<br/>
+- A choice by the user of collect folders<br/>
+- Collection of links information<br/>
+- Show of the table of not used files<br/>
+<br/>
+<b>The table</b> <b>of not used files</b><br/>
+
+<br/>            <br />
+ <center><img src="img/7.gif" width="804" height="591" alt="" /></center>    <br />
+<br/>
+In this table files not used by the scene are displayed. For convenience the information on the size and date of the last change of each file is shown. Opposite to each file at the left there is a flag. Operations Kill checked and Checked to trash concern those files for which this flag is set.<br/>
+The user can delete files or move to a local recycle bin. The local recycle bin is a folder $<b>trash</b>$, creating in folder in which unused files are found.<br/>
+Window buttons:<br/>
+<b>Kill</b> <b>checked</b> -  delete the files which flag is set<br/>
+<b>Kill</b> <b>all</b> -  delete all files<br/>
+<b>Checked</b> <b>to trash</b> -  move to a local trash can the files which flag is set<br/>
+<b>All</b> <b>to trash</b> -  move all files to a local recycle bin<br/>
+<b>Checkers</b>: <b>Invert</b> -  invert flags<br/>
+<b>Checkers</b>: <b>None</b> -  reset all flags<br/>
+<b>Checkers</b>: <b>All</b> -  set all flags<br/>
+<b>Checkers</b>: <b>Selected on</b> -  set flags for the selected strings (some strings it is possible to select, holding CTRL or SHIFT)<br/>
+<b>Checkers</b>: <b>Selected off</b> -  reset flags for the selected strings<br/>
+The mouse double click on string opens the map in VFB (virtual frame buffer). Each time new VFB window is opened, it is necessary not to forget to close these windows manually not to spend memory in vain.<br/>
+<br/>
+<h4>Relink to resources roots</h4><br/>
+This function is applied in the following situation: the project has passed collection process, after that collect folders (or collect folders and the project) have been transferred to another place: disk or computer. Attention: if project files only (the scene or the several linked scenes) is moved, this function is not required. The matter is that after change of location of collect folders all resource links in project will point to nonexistent files. <br/>
+The situation when these files will not get to a category of missing files is possible: if collect folders are transferred somewhere in a project folder (i.e. in a folder or in any its subfolder with any degree of an enclosure) or in a folder containing in paths which "sees" 3dsmax (for example, user paths). However even in such situation if user left things "as is" he may get missing files issue when attempting to merge objects from this scene to another. <br/>
+The given function changes all links so, that they specified in files with the same names, but being in the specified collect folders (if earlier specified folders do not exist appropriate fields of config will be cleared).<br/>
+<br/>
+Operation includes:<br/>
+- A choice by the user of collect folders<br/>
+- The scene backup saving <br/>
+- Collection the information of links<br/>
+- Output of a map of real paths of resources used in scene<br/>
+- Search and output of not found files and a complete tree of each object referring to this file<br/>
+- Fixing links<br/>
+- Saving scene file<br/>
+<h3>Other functions</h3><br/>
+Following three functions are not dealing with collect folders and can be applied on the scene, not passed collection process.<br/>
+<h4>Resolve links to existing</h4><br/>
+This function fixes links so, that they point to real files. It can work bypassing a technique of collection and is parallel from it. <br/>
+It includes:<br/>
+- The scene backup saving<br/>
+- Collection the information of links<br/>
+- Output of a map of real paths of the files used in the scene<br/>
+- Search and output of not found files and a complete tree of each object referring to this file<br/>
+- Fixing links<br/>
+- Saving scene file<br/>
+<h4>Missing files Identity</h4><br/>
+Function simply shows what objects point to missing files, with output of a complete tree of links. <br/>
+It includes:<br/>
+- Collection the information of links<br/>
+- Output of a map of real paths of resources used in scene<br/>
+- Search and output of not found files and a complete tree of each object referring to this file<br/>
+<h4>Convert to JPEG/TGA</h4><br/>
+This function converts ".tif", ".tiff", ".psd", ".png", ".tga" and ".bmp" to JPEG. ATTENTION: options of category <b>Affect</b> have no effect to this function. <br/>
+If the map contains an alpha-channel it cannot be saved without alpha loss in JPEG, therefore variants are offered to the user: convert in JPEG, save as TGA (if it is not a TGA-file) or leave without changes. Operation by default can be chosen in category <b>If image has alpha</b>. <br/>
+When the utility meets the bitmap with alpha-channel, it shows a window, where there is a slide miniature of this bitmap, the information about its dimensions, the size, and additional channels. <br/>
+Two variants of a window (on left the map already has format TGA) are shown below.<br/>
+
+<br/>                <br />
+  <center><img src="img/8.gif" width="910" height="620" alt="" /> </center> <br />
+<br/>
+Window buttons:<br/>
+<b>Convert</b> <b>to JPEG</b> - convert to JPEG with loss of data of an alpha-channel<br/>
+<b>Don't</b> <b>convert</b> - leave without changes<br/>
+<b>Convert</b> <b>to TGA</b> - convert the map to TGA with a RLE-compression; if option <b>PreMultAlpha</b> is checked, color of semitransparent pixels will be mixed with a background color; whether this option is set at each opening of dialogue, depends on a status of option <b>Premultiplied alpha in TGA</b> in rollout <b>Convert to JPEG</b>/<b>TGA</b>. <br/>
+<h2>Working with a XRef-tree </h2>
+If the scene contains XRef-links (XRef Scenes, XRef Objects, XRef Materials and XRef Atmospherics) and option Process XRef structure from category <b>Content</b> of the main rollout is checked, the utility can handle all scenes linked with flowing by means of this links.<br/>
+With an XRef-tree all functions of utility can work. Then at function start the XRef-tree window is shown. By indents user can see depth of an enclosure.<br/>
+<br/>
+Search of the scenes relating to an XRef-tree, is performed:<br/>
+- In XRef Scenes and the scenes switched on in them etc.; the graph can be looped, in the list constructed by the utility there will be no duplicates <br/>
+- In objects of the scene which have type XRefObject; if the object containing in this object has type XRefObject (through inclusion) search goes to such degree of an enclosure where the base object - not XRefObject<br/>
+- In a proxy of XRef-objects of the scene <br/>
+- In materials of the scene and, if it is necessary (option <b>Process medit</b>-<b>only</b> <b>content</b> from category <b>Content</b> of the main rollout), in materials of Material Editor which has been not applied to objects of the scene - also to necessary depth of an enclosure<br/>
+- In the effects of atmosphere imported from other scenes by means of the XRef-link - also to necessary depth of an enclosure<br/>
+
+<br/>           <br />
+<center><img src="img/9.gif" width="559" height="299" alt="" /> </center>       <br />
+<br/>
+In the lower left corner the name of current function is shown.<br/>
+Window buttons:<br/>
+<b>Abort</b> <b>operation</b> - cancel function execution<br/>
+<b>Continue</b> <b>without XRef tree</b> - continue only with the current scene<br/>
+<b>Continue</b> - continue with complete processing of all XRef-tree<br/>
+At processing of all XRef-tree, 3dsmax loads, processes and save, if it is necessary, all files from a tree. Processing of each file occurs, as is described above in utility functions description. Feature is only that to all scenes in the course of processing the same utility config (including paths of collect folders) are applied. <br/>
+<h3>Continue op after crash</h3><br/>
+As critical failures 3dsmax are frequent enough, in particular - at loading-unloading of big files, the situation when there is a crash during processing of the long list of files is quite possible. To continue the started function execution after 3dsmax reboot (it is necessary to be sure, that after window closing 3dsmax its process also was closed), <b>Continue op after crash</b> function is intended.<br/>
+After 3dsmax restart if the previous function execution has been interrupted by critical error or aborted by user, button <b>Continue op after crash</b> in the main rollout is in the enabled state. After pressing it user sees window <b>Continue After Crash</b>. In a window are displayed: settings with which function execution has been started, function name (in the lower left corner) and the list of files which are not handled yet (Files scheduled).<br/>
+
+<br/>                           <br />
+ <center><img src="img/10.gif" width="509" height="492" alt="" /></center> <br />
+<br/>
+Window buttons: <br/>
+<b>Cancel</b> - simply close a window: in case the user has simply wanted to look, that contains in a file of the information for <b>Continue op after crash</b> <br/>
+<b>Abort</b> <b>operation</b> - cancel the interrupted function execution and delete all data about it<br/>
+<b>Continue</b> - continue the interrupted function execution<br/>
+<br/>
+During XRef-tree processing in a batch-mode after each file current status of function execution is saved to make continuation in case of possible failure. At successful end of function execution this file is erased. The file in which the information for <b>Continue op after crash</b> is stored, has name "TOCollectoREX_cac.ini" and is in a folder of 3dsmax plug-ins config: if you enter in MAXScript Listener string symbolicPaths.getPathValue "$plugcfg" and press ENTER, MAXScript will show, where there is this folder, for example:<br/>
+"C:\Documents and Settings\Administrator\Local Settings\Application Data\Autodesk\3dsmax\2008 - 64bit\enu\plugcfg".<br/>
+It is not recommended to edit it manually; the utility itself will delete it when it became useless. <br/>
+<h2>Utility configuration </h2>
+For user convenience utility configuration is saved separately in each scene, for user not to set it up again next time, when he starts any utility function. If utility configuration is not saved in the scene yet, default settings (they are shown in the table of interface description above) are load. <br/>
+Changing of these defaults provided to customize the utility for user completely. "Defaults of the user" are saved in a file with a name "TOCollectoREX_defaults.ini", in a folder of 3dsmax plug-ins configuration (see above). By means of buttons from category <b>Config</b> of rollout <b>Help</b> <b>& Config</b> the user can save configuration from the current scene as defaults, load configuration from defaults, reset defaults in an initial status.<br/>
+<h2>The typical utility workflow </h2>
+The user creates the scene, links to it various resources and edits it. After end of each stage (if his work style means division into stages) or simply periodically user uses Collect resources function of utility. If required (for example, upon end of development of complex textures in Adobe Photoshop) user uses <b>Convert to JPEG</b>/<b>TGA</b> and from time to time - <b>Unused</b> to find out, what resources are not necessary any more, and so can be deleted. If in current scene objects from other scenes are merged, the user can use <b>Resolve links to existing</b> to find out, what actual resources loaded in the merged or imported piece of the scene. If any files are output in list Missing Files at scene loading, it is possible to use <b>Missing Files Identity</b> to know, which objects point to missing files and to fix a problem. <br/>
+The same workflow if the scene uses XRef-links, but usage <b>Continue op after crash</b> is possible at 3dsmax failures.<br/>
+For convenience the user can save a utility configuration as global defaults (for example if he prefers simple backup than incremental or does not want clear Material Editor every time utility function starts).<br/>
+<h2>Refusal from using the utility</h2>
+Using the utility or refusal from it does not impose any limitations on your technological process. If you refuse its usage and delete it from the system, no data will be lost, your scenes processed by the utility, will continue to open and be ok, as before. The same concerns and the resource files collected or converted by means of the utility.<br/>
+<h2>Known problems and solutions</h2>
+1. If you use displace space warp, and in it use the bitmap field, and are going to make Relink To Resources Roots (and now all files of the scene have status Missing), there is probability, that this picture will not relink to new path. Therefore we advise to use parameter Map in displace space warp instead of Bitmap (which is, actually, obsolete)<br/>
+2. If during execution of Find Unused Files function on X-Ref tree there was a 3dsmax crash, after restoring (Continue op after crash) the total list of the files which are not used by all XRef-tree will not shown - only for each file separately. Try to restart 3dsmax and repeat operation<br/>
+3. The utility uses possibilities of Microsoft.NET. Connection MAXScript - .NET is imperfect, therefore periodically can not redraw some controls. It is enough to click on these controls or to switch to other task, and then return in 3dsmax, to redraw them.<br/>
+4. After durable work of utility strange things (errors) in 3dsmax's work are possible. Usually it is preceded by output of one or several dialogues from 3dsmax, informing that in work of garbage collector of MAXScript there was an error. In this case restart 3dsmax and ensure that its process has been removed after closing of its window. It is better to start the utility in "new-started" 3dsmax.<br/>
+5. IFL - if names of files not relative then as a result of collection IFL will point to that place where specify paths, only if files there are present. It is recommended to create IFL-files, not using absolute path - in each string there should be only a filename (variant by default)<br/>
+6. The utility copies shader files, however it cannot copy the files specified in them. The option "do not copy shaders" allows not collecting shader files. It is checked by default.<br/>
+<br /><br />
+Tertium Organum ® 2008-2019
+</body>
+
+</html>
